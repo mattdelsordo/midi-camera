@@ -9,20 +9,24 @@ cap = cv2.VideoCapture(0)
 
 # Try to open the webcam, print message if it fails
 if cap.isOpened():
-    ret, img = cap.read()
+    ret, img1 = cap.read()
 else:
     print("Webcam not opened (try another device id?)")
     ret = False    
 
 while(ret):
-    # Display last frame on window
-    cv2.imshow("webcam",img)
-
     # Capture new frame
-    ret, img = cap.read()
+    ret, img2 = cap.read()
 
-    # Our operations on the frame come here
-    #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # Calculate difference between this frame and the last frame
+    diff = cv2.absdiff(img1, img2)
+    mask = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY) #grayscale it
+
+    # Display difference between the frames on the window
+    cv2.imshow("webcam",mask)
+
+    # Set last frame to the new curent frame
+    img1 = img2
 
     # ESC to quit
     if cv2.waitKey(1) == 27:
