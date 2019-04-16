@@ -2,8 +2,8 @@
 # object moves within the camera frame
 import cv2
 import numpy as np
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+# import pprint
+# pp = pprint.PrettyPrinter(indent=4)
 
 # Size of the grid that the image is split into
 GRID_SIZE = 8
@@ -57,7 +57,7 @@ while(ret):
 
             # add image indicator to img2
             if active_squares[x][y]:
-                print(startX,startX+chunkX, startY,startY+chunkY)
+                #pp.pprint(startX,startX+chunkX, startY,startY+chunkY)
                 img2[startX:startX+chunkX, startY:startY+chunkY, 2] += 50  
 
     # Display difference between the frames on the window
