@@ -6,7 +6,7 @@ import numpy as np
 # pp = pprint.PrettyPrinter(indent=4)
 
 # Size of the grid that the image is split into
-GRID_SIZE = 8
+GRID_SIZE = 6
 last_visited = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
 active_squares = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
 chunkX = 0
@@ -14,10 +14,13 @@ chunkY = 0
 
 # Below this intensity (0-255), don't include in the diff
 DIFF_THRESHOLD = 50
+# Amount of pixels in a square for it to count as activated
+ACTIVE_PIXEL_THRESHOLD = 1
 
 # Open window, start video capture
 cv2.namedWindow("feed")
-cap = cv2.VideoCapture(0)
+cv2.namedWindow("grayscale")
+cap = cv2.VideoCapture(1)
 
 # Try to open the webcam, print message if it fails
 if cap.isOpened():
@@ -47,7 +50,9 @@ while(ret):
             startX = x * chunkX
             startY = y * chunkY
             # check each chunk for the presence of an object
-            if (np.count_nonzero(gray[startX:startX+chunkX, startY:startY+chunkY]) > 1):
+            chunk_count = np.count_nonzero(gray[startX:startX+chunkX, startY:startY+chunkY])
+            #print(x, y, chunk_count)
+            if (chunk_count > ACTIVE_PIXEL_THRESHOLD):
                 # if the object wasn't here in the last frame, toggle the square
                 if not last_visited[x][y]:
                     active_squares[x][y] = not active_squares[x][y]
@@ -58,10 +63,12 @@ while(ret):
             # add image indicator to img2
             if active_squares[x][y]:
                 #pp.pprint(startX,startX+chunkX, startY,startY+chunkY)
-                img2[startX:startX+chunkX, startY:startY+chunkY, 2] += 50  
+                img2[startX:startX+chunkX, startY:startY+chunkY, 2] += 50
+                #pp.pprint(img2[startX:startX+chunkX, startY:startY+chunkY, 2]) 
 
     # Display difference between the frames on the window
     cv2.imshow("feed", img2)
+    cv2.imshow("grayscale", gray)
 
     # Set last frame to the new curent frame
     img1 = img2
