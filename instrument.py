@@ -6,7 +6,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 # Size of the grid that the image is split into
-GRID_SIZE = 4
+GRID_SIZE = 8
 last_visited = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
 active_squares = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
 chunkX = 0
@@ -42,22 +42,26 @@ while(ret):
     gray[gray < DIFF_THRESHOLD] = 0
     
     # Operate on each square of the diff
-    for y in range(0, GRID_SIZE):
-        for x in range(0, GRID_SIZE):
+    for x in range(0, GRID_SIZE):
+        for y in range(0, GRID_SIZE):
             startX = x * chunkX
             startY = y * chunkY
             # check each chunk for the presence of an object
-            if (np.count_nonzero(gray[startX:startX+chunkX, startX:startX+chunkY]) > 1):
+            if (np.count_nonzero(gray[startX:startX+chunkX, startY:startY+chunkY]) > 1):
                 # if the object wasn't here in the last frame, toggle the square
                 if not last_visited[x][y]:
                     active_squares[x][y] = not active_squares[x][y]
                 last_visited[x][y] = True
             else:
                 last_visited[x][y] = False
-            pp.pprint(active_squares)
+
+            # add image indicator to img2
+            if active_squares[x][y]:
+                print(startX,startX+chunkX, startY,startY+chunkY)
+                img2[startX:startX+chunkX, startY:startY+chunkY, 2] += 50  
 
     # Display difference between the frames on the window
-    cv2.imshow("feed", gray)
+    cv2.imshow("feed", img2)
 
     # Set last frame to the new curent frame
     img1 = img2
