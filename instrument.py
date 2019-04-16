@@ -2,6 +2,7 @@
 # object moves within the camera frame
 import cv2
 import numpy as np
+import mido
 # import pprint
 # pp = pprint.PrettyPrinter(indent=4)
 
@@ -17,10 +18,18 @@ DIFF_THRESHOLD = 50
 # Amount of pixels in a square for it to count as activated
 ACTIVE_PIXEL_THRESHOLD = 1
 
+# Set up MIDI out stuff
+print(mido.get_output_names())
+port = mido.open_output("Midi Through:Midi Through Port-0 14:0")
+def playNote(note):
+    msg = mido.Message('note_on', note=50+note)
+    port.send(msg)
+    print("Sent", msg)
+
 # Open window, start video capture
 cv2.namedWindow("feed")
 cv2.namedWindow("grayscale")
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 # Try to open the webcam, print message if it fails
 if cap.isOpened():
@@ -69,6 +78,10 @@ while(ret):
     # Display difference between the frames on the window
     cv2.imshow("feed", img2)
     cv2.imshow("grayscale", gray)
+
+    # play note
+    if (active_squares[x][y]):
+        playNote((y * GRID_SIZE) + x)
 
     # Set last frame to the new curent frame
     img1 = img2
