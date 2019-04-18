@@ -21,17 +21,17 @@ if args.listout:
     exit()
 DEBUG = args.debug
 
-# Size of the grid that the image is split into
-GRID_SIZE = int(args.grid)
-last_visited = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
-active = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
-chunkX = 0
-chunkY = 0
+# Initialize important constants
+GRID_SIZE = int(args.grid) # of squares in grid
+DIFF_THRESHOLD = 50 # Intensity cutoff for ENHANCE step
+ACTIVE_PIXEL_THRESHOLD = 1 # necessary pixels in a square for it to count as "activated"
+PIXEL_TOTAL_THRESHOLD = 1 # necessary pixels in the whole frame before the state is updated
+chunkX = 0 # width of each square in pixels
+chunkY = 0 # height of each square in pixels
 
-# Below this intensity (0-255), don't include in the diff
-DIFF_THRESHOLD = 50
-# Amount of pixels in a square for it to count as activated
-ACTIVE_PIXEL_THRESHOLD = 1
+last_visited = [([False]*GRID_SIZE) for i in range(GRID_SIZE)] # stores position of objects in previous frame
+active = [([False]*GRID_SIZE) for i in range(GRID_SIZE)] # stores current state of each square
+pixel_count = [([False]*GRID_SIZE) for i in range(GRID_SIZE)] # stores pre-computed pixel count to ignore empty frames
 
 # Set up MIDI out stuff
 out_port = mido.get_output_names()[int(args.output)]
@@ -69,7 +69,7 @@ if DEBUG: cv2.namedWindow("grayscale")
 cap = cv2.VideoCapture(args.input)
 print("Input on video device " + str(args.input))
 
-# Try to open the webcam and initialize constants
+# Try to open the webcam and initialize constants if success
 # print message if it fails
 if cap.isOpened():
     ret, img1 = cap.read()
@@ -91,6 +91,16 @@ while(ret):
     # ENHANCE
     gray[gray >= DIFF_THRESHOLD] = 255
     gray[gray < DIFF_THRESHOLD] = 0
+
+    # Count number of pixels in each square
+    for x in range(0, GRID_SIZE):
+        for y in range(0, GRID_SIZE):
+            startX = x * chunkX
+            startY = y * chunkY
+            pixel_count[x][y] = np.count_nonzero(gray[startX:startX+chunkX, startY:startY+chunkY])
+    
+    # If there is no change across the entire frame, skip
+    pixel_total = sum(map(sum, pixel_count))
     
     # Operate on each square of the diff
     for x in range(0, GRID_SIZE):
@@ -98,21 +108,22 @@ while(ret):
             startX = x * chunkX
             startY = y * chunkY
 
-            # check each chunk for the presence of an object
-            chunk_count = np.count_nonzero(gray[startX:startX+chunkX, startY:startY+chunkY])
-            # If object is present...
-            if (chunk_count > ACTIVE_PIXEL_THRESHOLD):
-                # if the object wasn't here in the last frame,
-                # toggle the square and play the note
-                if not last_visited[x][y]:
-                    active[x][y] = not active[x][y] # update the state
-                    toggleNote(x, y, active[x][y]) # toggle the note
-                # update state
-                last_visited[x][y] = True
-            # Otherwise, only update state
-            else:
-                last_visited[x][y] = False
+            # Only re-compute new state if there has been an overall change
+            if (pixel_total >= PIXEL_TOTAL_THRESHOLD):
+                # If object is present...
+                if (pixel_count[x][y] >= ACTIVE_PIXEL_THRESHOLD):
+                    # if the object wasn't here in the last frame,
+                    # toggle the square and play the note
+                    if not last_visited[x][y]:
+                        active[x][y] = not active[x][y] # update the state
+                        toggleNote(x, y, active[x][y]) # toggle the note
+                    # update state
+                    last_visited[x][y] = True
+                # Otherwise, only update state
+                else:
+                    last_visited[x][y] = False
 
+            # But updating img2 has to happen every time
             # If a square is active, color it red in the video feed
             if active[x][y]:
                 img2[startX:startX+chunkX, startY:startY+chunkY, 2] += 50
