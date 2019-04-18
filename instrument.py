@@ -7,9 +7,9 @@ import mido
 # pp = pprint.PrettyPrinter(indent=4)
 
 # Size of the grid that the image is split into
-GRID_SIZE = 6
+GRID_SIZE = 8
 last_visited = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
-active_squares = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
+active = [([False]*GRID_SIZE) for i in range(GRID_SIZE)]
 chunkX = 0
 chunkY = 0
 
@@ -19,12 +19,30 @@ DIFF_THRESHOLD = 50
 ACTIVE_PIXEL_THRESHOLD = 1
 
 # Set up MIDI out stuff
-print(mido.get_output_names())
+print("Ports: ", mido.get_output_names())
 port = mido.open_output("Midi Through:Midi Through Port-0 14:0")
-def playNote(note):
-    msg = mido.Message('note_on', note=50+note)
+def noteOn(note):
+    msg = mido.Message('note_on', note=note)
     port.send(msg)
-    print("Sent", msg)
+    print(msg)
+
+def noteOff(note):
+    msg = mido.Message('note_off', note=note)
+    port.send(msg)
+    print(msg)
+
+# "Toggles" some note on or off
+def toggleNote(x, y, status):
+    note = (y * GRID_SIZE) + x
+    
+    # Note on if note was not previously on
+    if (status):
+        print("Note on", x, y)
+        noteOn(note)
+    # Note off if note WAS on and is not anymore    
+    else:
+        print("Note off", x, y)
+        noteOff(note)
 
 # Open window, start video capture
 cv2.namedWindow("feed")
@@ -60,28 +78,25 @@ while(ret):
             startY = y * chunkY
             # check each chunk for the presence of an object
             chunk_count = np.count_nonzero(gray[startX:startX+chunkX, startY:startY+chunkY])
-            #print(x, y, chunk_count)
+            # print(x, y, chunk_count)
             if (chunk_count > ACTIVE_PIXEL_THRESHOLD):
                 # if the object wasn't here in the last frame, toggle the square
                 if not last_visited[x][y]:
-                    active_squares[x][y] = not active_squares[x][y]
+                    active[x][y] = not active[x][y] # update the note
+                    toggleNote(x, y, active[x][y]) # toggle the note
                 last_visited[x][y] = True
             else:
                 last_visited[x][y] = False
 
             # add image indicator to img2
-            if active_squares[x][y]:
-                #pp.pprint(startX,startX+chunkX, startY,startY+chunkY)
+            if active[x][y]:
+                # pp.pprint(startX,startX+chunkX, startY,startY+chunkY)
                 img2[startX:startX+chunkX, startY:startY+chunkY, 2] += 50
-                #pp.pprint(img2[startX:startX+chunkX, startY:startY+chunkY, 2]) 
+                # pp.pprint(img2[startX:startX+chunkX, startY:startY+chunkY, 2]) 
 
     # Display difference between the frames on the window
     cv2.imshow("feed", img2)
     cv2.imshow("grayscale", gray)
-
-    # play note
-    if (active_squares[x][y]):
-        playNote((y * GRID_SIZE) + x)
 
     # Set last frame to the new curent frame
     img1 = img2
