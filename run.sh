@@ -1,3 +1,3 @@
 #! /bin/bash
 
-python instrument.py & chuck sound_test.ck
+python midi-camera.py & chuck main.ck
