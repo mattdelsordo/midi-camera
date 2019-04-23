@@ -15,78 +15,61 @@ MidiMsg msg;
 me.dir() + "/gerb.ck" => string gerbPath; //paths for sporking
 me.dir() + "/gnawing.ck" => string gnawPath;
 me.dir() + "/wheelRun.ck" => string wheelPath;
+me.dir() + "/hamtaro.ck" => string hamtaroPath;
+me.dir() + "/dance.ck" => string dancePath;
+me.dir() + "/snare1.ck" => string snare1Path;
+me.dir() + "/kick1.ck" => string kick1Path;
+me.dir() + "/hihat1.ck" => string hihat1Path;
+me.dir() + "/squirrel.ck" => string squirrelPath;
 
 // Store the paths and machine IDs in arrays for easier access
-[gerbPath, gnawPath, wheelPath] @=> string paths[];
+[gerbPath, gnawPath, wheelPath, hamtaroPath, dancePath, snare1Path, kick1Path, hihat1Path, squirrelPath] @=> string paths[];
 int IDs[paths.cap()];
+int chuckQueue[paths.cap()];
 
-//function that will assign music to received midi
-fun void tunes(int trackNum, int running){  //tests with 3 - should be top 3 squares 
-    // Don't do anything if the incoming track number is a higher
-    // number than the actual amount of tracks we have
-    if (trackNum >= paths.cap()) return; 
-    
-    if (running) {
-        Machine.add(paths[trackNum]) => IDs[trackNum];
-    } else {
-        Machine.remove(IDs[trackNum]);
-    }
-    // if (msg2 == 1){
-    //     Machine.add(gerbPath) => int one;
-    //     if (running == 0){
-    //         Machine.remove(one);
-    //     }
-    // }if (msg2 == 2){
-    //     Machine.add(gnawPath) => int two;
-    //     if (running == 0){
-    //         Machine.remove(two);
-    //     }
-    // }if (msg2 == 3){
-    //     Machine.add(wheelPath) => int three;
-    //     if (running == 0){
-    //         Machine.remove(three);
-    //     }
-    // }
-}
-
-while(true){
-    //advance time when receiving midi messages
-    min => now;
-    //0 => int running; //initializes on/off val
-    while(min.recv(msg)){
-        <<< msg.data1, msg.data2, msg.data3 >>>;
-        //if note on
-        if(msg.data1 == 144){
-            tunes(msg.data2, 1);
-            2::second => now; //wait for 2 seconds
-            // 1 => running;
-            // //put data through function to assign sound/music
-            // if (msg.data2 == 1){
-            //     tunes(1, running);
-            //     2::second => now; //wait for 2 seconds
-            // }
-            // if (msg.data2 == 2){
-            //     tunes(2, running);
-            //     2::second => now; //wait for 2 seconds
-            // }
-            // if (msg.data2 == 3){
-            //     tunes(3, running);
-            //     2::second => now; //wait for 2 seconds
-            // }
-        }if (msg.data1 == 128){
-            tunes(msg.data2, 0);
-            //determine if spork is running
-            //remove shred
-            // 0 => running;
-            // if (msg.data2 == 1){
-            //     tunes(1, running);
-            // }
-            // if (msg.data2 == 2){
-            //     tunes(2, running);
-            // }
-            // if (msg.data2 == 3){
-            //     tunes(3, running);
-            // }
+// Listen for MIDI input, add recieved messages to queue
+fun void listen() {
+    while(true){
+        //advance time when receiving midi messages
+        min => now;
+        //0 => int running; //initializes on/off val
+        while(min.recv(msg)){
+            <<< msg.data1, msg.data2, msg.data3 >>>;
+            if (msg.data2 >= paths.cap()){ continue; }
+            //if note on
+            if(msg.data1 == 144){
+                true => chuckQueue[msg.data2];
+            }if (msg.data1 == 128){
+                false => chuckQueue[msg.data2];
+            }
         }
     }
 }
+
+// TODO: make a tempo controller somewhere else
+1::minute/120 => dur BPM;
+BPM * 4 => dur chuckInterval;
+// Only chuck new shreds at a given interval
+fun void chuck() {
+    while(true){
+        for (0 => int i; i < chuckQueue.cap(); i++) {
+            // chuck if shred is in the queue and not chucked
+            if (chuckQueue[i] && IDs[i] == 0) {
+                Machine.add(paths[i]) => IDs[i];
+            }
+            // unchuck if shred is not in the queue and is chucked
+            else if (!chuckQueue[i] && IDs[i] > 0) {
+                Machine.remove(IDs[i]);
+                0 => IDs[i];
+            }
+        }
+        
+        // wait
+        chuckInterval => now;
+    }
+}
+
+// Start listener and shred chucking process
+spork ~ listen();
+spork ~ chuck();
+while(true) {1::minute => now;} // infinite loop of doom
