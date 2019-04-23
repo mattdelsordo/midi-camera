@@ -64,8 +64,12 @@ def toggleNote(x, y, status):
         noteOff(note)
 
 # Open window, start video capture
-cv2.namedWindow("feed")
-if DEBUG: cv2.namedWindow("grayscale")
+if DEBUG:
+    cv2.namedWindow("feed")
+    cv2.namedWindow("grayscale")
+else:
+    cv2.namedWindow("feed", cv2.WINDOW_NORMAL)
+    cv2.setWindowProperty("feed", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 cap = cv2.VideoCapture(args.input)
 print("Input on video device " + str(args.input))
 
