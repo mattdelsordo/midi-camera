@@ -3,8 +3,8 @@ me.dir(-1) + "/audio/gerbil.wav" => gerb.read;
 // set their pointers to end, to make no sound
 gerb.samples() => gerb.pos;
 [0,1,0,1] @=> int gerbil_ptrn[];
-136 => float BPM; //defined BPM
-(60/BPM)::second => dur quarter; //duration of a "beat"
+
+BPM tempo;
 
 while(true){
     0 => int beat;
@@ -13,7 +13,7 @@ while(true){
             0.4 => gerb.gain;
             0 => gerb.pos;
         }
-        quarter => now;
+        tempo.quarterNote => now;
         beat++;
     }
 }

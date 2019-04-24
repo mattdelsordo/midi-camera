@@ -45,9 +45,8 @@ fun void listen() {
     while(true){
         //advance time when receiving midi messages
         min => now;
-        //0 => int running; //initializes on/off val
         while(min.recv(msg)){
-            <<< msg.data1, msg.data2, msg.data3 >>>;
+            // <<< msg.data1, msg.data2, msg.data3 >>>;
             if (msg.data2 >= paths.cap()){ continue; }
             //if note on
             if(msg.data1 == 144){
@@ -60,8 +59,9 @@ fun void listen() {
 }
 
 // TODO: make a tempo controller somewhere else
-1::minute/136 => dur BPM;
-BPM * 4 => dur chuckInterval;
+BPM tempo;
+tempo.tempo(136);
+
 // Only chuck new shreds at a given interval
 fun void chuck() {
     while(true){
@@ -78,7 +78,7 @@ fun void chuck() {
         }
         
         // wait
-        chuckInterval => now;
+        tempo.quarterNote => now;
     }
 }
 

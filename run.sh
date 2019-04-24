@@ -1,3 +1,3 @@
 #! /bin/bash
 
-python midi-camera.py & chuck main.ck
+python midi-camera.py & chuck initialize.ck
