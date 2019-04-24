@@ -1,5 +1,5 @@
 SndBuf wasabi => dac;
-me.dir() + "/audio/djwasabi.wav" => wasabi.read;
+me.dir(-1) + "/audio/djwasabi.wav" => wasabi.read;
 // set their pointers to end, to make no sound
 wasabi.samples() => wasabi.pos;
 [0,1,0,1, 0,0, 0, 0] @=> int wasabi_ptrn[];

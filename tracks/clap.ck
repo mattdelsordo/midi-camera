@@ -1,5 +1,5 @@
 SndBuf clap => dac;
-me.dir() + "/audio/clap.wav" => clap.read;
+me.dir(-1) + "/audio/clap.wav" => clap.read;
 // set their pointers to end, to make no sound
 clap.samples() => clap.pos;
 [1,1,1,1,1,0,1,0] @=> int clap_ptrn[];

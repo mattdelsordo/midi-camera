@@ -1,5 +1,5 @@
 SndBuf gnaw => dac;
-me.dir() + "/audio/gnawing.wav" => gnaw.read;
+me.dir(-1) + "/audio/gnawing.wav" => gnaw.read;
 // set their pointers to end, to make no sound
 gnaw.samples() => gnaw.pos;
 [0,1,1,0,0,0,1,0] @=> int gnawing_ptrn[];

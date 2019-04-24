@@ -1,5 +1,5 @@
 SndBuf water => dac;
-me.dir() + "/audio/drinkingWater.wav" => water.read;
+me.dir(-1) + "/audio/drinkingWater.wav" => water.read;
 // set their pointers to end, to make no sound
 water.samples() => water.pos;
 [1,0,0,0,0,1,0,1] @=> int water_ptrn[];

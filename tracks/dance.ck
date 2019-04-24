@@ -1,5 +1,5 @@
 SndBuf dance => dac;
-me.dir() + "/audio/hamsterDance.wav" => dance.read;
+me.dir(-1) + "/audio/hamsterDance.wav" => dance.read;
 // set their pointers to end, to make no sound
 dance.samples() => dance.pos;
 

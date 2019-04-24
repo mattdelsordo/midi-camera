@@ -1,5 +1,5 @@
 SndBuf bass => dac;
-me.dir() + "/audio/bass.wav" => bass.read;
+me.dir(-1) + "/audio/bass.wav" => bass.read;
 // set their pointers to end, to make no sound
 bass.samples() => bass.pos;
 [1,0,1,1,1,0,1,0] @=> int bass_ptrn[];

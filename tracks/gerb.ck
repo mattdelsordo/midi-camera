@@ -1,5 +1,5 @@
 SndBuf gerb => dac;
-me.dir() + "/audio/gerbil.wav" => gerb.read;
+me.dir(-1) + "/audio/gerbil.wav" => gerb.read;
 // set their pointers to end, to make no sound
 gerb.samples() => gerb.pos;
 [0,1,0,1] @=> int gerbil_ptrn[];

@@ -1,5 +1,5 @@
 SndBuf wheel => dac;
-me.dir() + "/audio/wheelRun.wav" => wheel.read;
+me.dir(-1) + "/audio/wheelRun.wav" => wheel.read;
 // set their pointers to end, to make no sound
 wheel.samples() => wheel.pos;
 [1,0,0,0,1,0,0,0] @=> int wheel_ptrn[];

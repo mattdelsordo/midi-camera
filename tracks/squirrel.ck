@@ -1,5 +1,5 @@
 SndBuf squirrel => dac;
-me.dir() + "/audio/empnewgroove.wav" => squirrel.read;
+me.dir(-1) + "/audio/empnewgroove.wav" => squirrel.read;
 // set their pointers to end, to make no sound
 squirrel.samples() => squirrel.pos;
 150 => float BPM; //defined BPM

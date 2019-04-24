@@ -1,5 +1,5 @@
 SndBuf eat => dac;
-me.dir() + "/audio/eating.wav" => eat.read;
+me.dir(-1) + "/audio/eating.wav" => eat.read;
 // set their pointers to end, to make no sound
 eat.samples() => eat.pos;
 [0,1,1,0,0,0,1,0] @=> int eating_ptrn[];

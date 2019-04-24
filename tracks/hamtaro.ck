@@ -1,5 +1,5 @@
 SndBuf hamtaro => dac;
-me.dir() + "/audio/hamtaroTheme.wav" => hamtaro.read;
+me.dir(-1) + "/audio/hamtaroTheme.wav" => hamtaro.read;
 // set their pointers to end, to make no sound
 hamtaro.samples() => hamtaro.pos;
 

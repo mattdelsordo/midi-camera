@@ -1,5 +1,5 @@
 SndBuf kick1 => dac;
-me.dir() + "/audio/punchkick.wav" => kick1.read;
+me.dir(-1) + "/audio/punchkick.wav" => kick1.read;
 // set their pointers to end, to make no sound
 kick1.samples() => kick1.pos;
 [1,0,1,1, 0, 1, 1, 0] @=> int kick1_ptrn[];

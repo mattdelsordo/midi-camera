@@ -1,5 +1,5 @@
 SndBuf hihat1 => dac;
-me.dir() + "/audio/hihat1.wav" => hihat1.read;
+me.dir(-1) + "/audio/hihat1.wav" => hihat1.read;
 // set their pointers to end, to make no sound
 hihat1.samples() => hihat1.pos;
 [1,0,1, 0, 0, 1, 1, 1] @=> int hihat1_ptrn[];

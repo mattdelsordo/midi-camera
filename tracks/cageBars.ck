@@ -1,5 +1,5 @@
 SndBuf cage => dac;
-me.dir() + "/audio/cageBars.wav" => cage.read;
+me.dir(-1) + "/audio/cageBars.wav" => cage.read;
 // set their pointers to end, to make no sound
 cage.samples() => cage.pos;
 [1,1,0,1] @=> int cage_ptrn[];

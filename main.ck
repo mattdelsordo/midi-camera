@@ -17,22 +17,23 @@ if( !min.open(port))
 }
 // holder for received messages
 MidiMsg msg;
-me.dir() + "/gerb.ck" => string gerbPath; //paths for sporking
-me.dir() + "/gnawing.ck" => string gnawPath;
-me.dir() + "/wheelRun.ck" => string wheelPath;
-me.dir() + "/hamtaro.ck" => string hamtaroPath;
-me.dir() + "/dance.ck" => string dancePath;
-me.dir() + "/snare1.ck" => string snare1Path;
-me.dir() + "/kick1.ck" => string kick1Path;
-me.dir() + "/hihat1.ck" => string hihat1Path;
-me.dir() + "/squirrel.ck" => string squirrelPath;
-me.dir() + "/clap.ck" => string clapPath;
-me.dir() + "/eating.ck" => string eatPath;
-me.dir() + "/drinkingWater.ck" => string waterPath;
-me.dir() + "/burrowing.ck" => string burrowPath;
-me.dir() + "/cageBars.ck" => string cagePath;
-me.dir() + "/bass.ck" => string bassPath;
-me.dir() + "/wasabi.ck" => string wasabiPath;
+me.dir() + "/tracks" => string trackDir;
+trackDir + "/gerb.ck" => string gerbPath; //paths for sporking
+trackDir + "/gnawing.ck" => string gnawPath;
+trackDir + "/wheelRun.ck" => string wheelPath;
+trackDir + "/hamtaro.ck" => string hamtaroPath;
+trackDir + "/dance.ck" => string dancePath;
+trackDir + "/snare1.ck" => string snare1Path;
+trackDir + "/kick1.ck" => string kick1Path;
+trackDir + "/hihat1.ck" => string hihat1Path;
+trackDir + "/squirrel.ck" => string squirrelPath;
+trackDir + "/clap.ck" => string clapPath;
+trackDir + "/eating.ck" => string eatPath;
+trackDir + "/drinkingWater.ck" => string waterPath;
+trackDir + "/burrow.ck" => string burrowPath;
+trackDir + "/cageBars.ck" => string cagePath;
+trackDir + "/bass.ck" => string bassPath;
+trackDir + "/wasabi.ck" => string wasabiPath;
 
 // Store the paths and machine IDs in arrays for easier access
 [gerbPath, gnawPath, wheelPath, hamtaroPath, dancePath, snare1Path, kick1Path, hihat1Path, squirrelPath, wasabiPath, clapPath, eatPath, waterPath, burrowPath, cagePath, bassPath] @=> string paths[];
