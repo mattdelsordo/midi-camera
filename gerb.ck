@@ -2,14 +2,18 @@ SndBuf gerb => dac;
 me.dir() + "/audio/gerbil.wav" => gerb.read;
 // set their pointers to end, to make no sound
 gerb.samples() => gerb.pos;
-[1,0,1,0,1,0,0,0] @=> int gerbil_ptrn[];
+[0,1,0,1] @=> int gerbil_ptrn[];
+136 => float BPM; //defined BPM
+(60/BPM)::second => dur quarter; //duration of a "beat"
 
-while (true){
-    for (0 => int beats; beats < gerbil_ptrn.cap(); beats++){
-        if (gerbil_ptrn[beats]){
-            0.5 => gerb.gain;
+while(true){
+    0 => int beat;
+    while (beat < gerbil_ptrn.cap()){
+        if (gerbil_ptrn[beat]){
+            0.4 => gerb.gain;
             0 => gerb.pos;
-            1::second => now; //advance time
         }
+        quarter => now;
+        beat++;
     }
 }

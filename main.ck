@@ -1,3 +1,8 @@
+/*
+    "Beats by Hammy"
+    Fayth Kim && Matt DelSordo
+*/
+
 // Setup MIDI input, set a port number
 MidiIn min;
 
@@ -21,9 +26,16 @@ me.dir() + "/snare1.ck" => string snare1Path;
 me.dir() + "/kick1.ck" => string kick1Path;
 me.dir() + "/hihat1.ck" => string hihat1Path;
 me.dir() + "/squirrel.ck" => string squirrelPath;
+me.dir() + "/clap.ck" => string clapPath;
+me.dir() + "/eating.ck" => string eatPath;
+me.dir() + "/drinkingWater.ck" => string waterPath;
+me.dir() + "/burrowing.ck" => string burrowPath;
+me.dir() + "/cageBars.ck" => string cagePath;
+me.dir() + "/bass.ck" => string bassPath;
+me.dir() + "/wasabi.ck" => string wasabiPath;
 
 // Store the paths and machine IDs in arrays for easier access
-[gerbPath, gnawPath, wheelPath, hamtaroPath, dancePath, snare1Path, kick1Path, hihat1Path, squirrelPath] @=> string paths[];
+[gerbPath, gnawPath, wheelPath, hamtaroPath, dancePath, snare1Path, kick1Path, hihat1Path, squirrelPath, wasabiPath, clapPath, eatPath, waterPath, burrowPath, cagePath, bassPath] @=> string paths[];
 int IDs[paths.cap()];
 int chuckQueue[paths.cap()];
 
@@ -47,7 +59,7 @@ fun void listen() {
 }
 
 // TODO: make a tempo controller somewhere else
-1::minute/120 => dur BPM;
+1::minute/136 => dur BPM;
 BPM * 4 => dur chuckInterval;
 // Only chuck new shreds at a given interval
 fun void chuck() {
