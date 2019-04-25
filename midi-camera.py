@@ -70,7 +70,9 @@ if DEBUG:
 else:
     cv2.namedWindow("feed", cv2.WINDOW_NORMAL)
     cv2.setWindowProperty("feed", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-cap = cv2.VideoCapture(args.input)
+cap = cv2.VideoCapture(int(args.input))
+cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn off Logitech C920 autofocus
+cap.set(28, 0) # manually set focus
 print("Input on video device " + str(args.input))
 
 # Try to open the webcam and initialize constants if success
