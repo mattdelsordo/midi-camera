@@ -1,4 +1,4 @@
-SndBuf wheel => dac;
+SndBuf wheel => Pan2 p => dac;
 me.dir(-1) + "/audio/wheelRun.wav" => wheel.read;
 // set their pointers to end, to make no sound
 wheel.samples() => wheel.pos;
@@ -6,6 +6,7 @@ wheel.samples() => wheel.pos;
 
 BPM tempo;
 0.6 => wheel.gain;
+-0.4 => p.pan;
 
 while(true){
     0 => int beat;

@@ -1,10 +1,11 @@
-SndBuf burrow => dac;
+SndBuf burrow => Pan2 p => dac;
 me.dir(-1) + "/audio/burrowing.wav" => burrow.read;
 // set their pointers to end, to make no sound
 burrow.samples() => burrow.pos;
 [1,0,1,0,0,1,0,1] @=> int burrow_ptrn[];
 
 BPM tempo;
+0.4 => p.pan;
 
 while(true){
     0 => int beat;

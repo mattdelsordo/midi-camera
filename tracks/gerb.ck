@@ -1,4 +1,4 @@
-SndBuf gerb => dac;
+SndBuf gerb => Pan2 p =>  dac;
 me.dir(-1) + "/audio/gerbil.wav" => gerb.read;
 // set their pointers to end, to make no sound
 gerb.samples() => gerb.pos;
@@ -7,6 +7,7 @@ gerb.samples() => gerb.pos;
 BPM tempo;
 
 0.2 => gerb.gain;
+0.7 => p.pan;
 
 while(true){
     0 => int beat;
