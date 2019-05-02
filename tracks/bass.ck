@@ -1,10 +1,12 @@
-SndBuf bass => dac;
+SndBuf bass => Pan2 p => dac;
 me.dir(-1) + "/audio/bass.wav" => bass.read;
 // set their pointers to end, to make no sound
 bass.samples() => bass.pos;
 [1,0,0,0,1,0,0,1] @=> int bass_ptrn[];
 0.4 => bass.gain;
 BPM tempo;
+
+-0.2 => p.pan;
 
 while(true){
     0 => int beat;

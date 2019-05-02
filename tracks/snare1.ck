@@ -1,4 +1,4 @@
-SndBuf snare => dac;
+SndBuf snare => Pan2 p => dac;
 me.dir(-1) + "/audio/snare1.wav" => snare.read;
 // set their pointers to end, to make no sound
 snare.samples() => snare.pos;
@@ -7,6 +7,7 @@ snare.samples() => snare.pos;
 BPM tempo;
 
 0.7 => snare.gain;
+0.25 => p.pan;
 
 while(true){
     0 => int beat;

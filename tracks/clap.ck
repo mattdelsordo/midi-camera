@@ -1,4 +1,4 @@
-SndBuf clap => dac;
+SndBuf clap => Pan2 p => dac;
 me.dir(-1) + "/audio/clap.wav" => clap.read;
 // set their pointers to end, to make no sound
 clap.samples() => clap.pos;
@@ -6,6 +6,8 @@ clap.samples() => clap.pos;
 0.6 => clap.gain;
 
 BPM tempo;
+
+-0.2 => p.pan;
 
 while(true){
     0 => int beat;

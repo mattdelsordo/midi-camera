@@ -1,4 +1,4 @@
-SndBuf hihat1 => dac;
+SndBuf hihat1 => Pan2 p => dac;
 me.dir(-1) + "/audio/hihat1.wav" => hihat1.read;
 // set their pointers to end, to make no sound
 hihat1.samples() => hihat1.pos;
@@ -6,6 +6,7 @@ hihat1.samples() => hihat1.pos;
 
 BPM tempo;
 0.6 => hihat1.gain;
+0.2 => p.pan;
 
 while(true){
     0 => int beat;
