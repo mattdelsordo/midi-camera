@@ -13,7 +13,7 @@ while(true){
             0.4 => gnaw.gain;
             0 => gnaw.pos;
         }
-        tempo.quarterNote => now;
+        tempo.quarterNote/2 => now;
         beat++;
     }
 }

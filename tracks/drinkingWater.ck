@@ -6,14 +6,15 @@ water.samples() => water.pos;
 
 BPM tempo;
 
+0.8 => water.gain;
+
 while(true){
     0 => int beat;
     while (beat < water_ptrn.cap()){
         if (water_ptrn[beat]){
-            0.4 => water.gain;
             0 => water.pos;
         }
-        tempo.quarterNote => now;
+        tempo.quarterNote/4 => now;
         beat++;
     }
 }

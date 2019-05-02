@@ -5,15 +5,15 @@ wheel.samples() => wheel.pos;
 [1,0,0,0,1,0,0,0] @=> int wheel_ptrn[];
 
 BPM tempo;
+0.6 => wheel.gain;
 
 while(true){
     0 => int beat;
     while (beat < wheel_ptrn.cap()){
         if (wheel_ptrn[beat]){
-            0.4 => wheel.gain;
             0 => wheel.pos;
         }
-        tempo.quarterNote => now;
+        tempo.quarterNote/2 => now;
         beat++;
     }
 }

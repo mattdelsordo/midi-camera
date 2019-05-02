@@ -10,10 +10,10 @@ while(true){
     0 => int beat;
     while (beat < eating_ptrn.cap()){
         if (eating_ptrn[beat]){
-            0.8 => eat.gain;
+            //0.8 => eat.gain;
             0 => eat.pos;
         }
-        tempo.quarterNote => now;
+        tempo.quarterNote/2 => now;
         beat++;
     }
 }

@@ -6,14 +6,15 @@ snare.samples() => snare.pos;
 
 BPM tempo;
 
+0.7 => snare.gain;
+
 while(true){
     0 => int beat;
     while (beat < snare1_ptrn.cap()){
         if (snare1_ptrn[beat]){
-            0.5 => snare.gain;
             0 => snare.pos;
         }
-        tempo.quarterNote => now;
+        tempo.quarterNote/4 => now;
         beat++;
     }
 }

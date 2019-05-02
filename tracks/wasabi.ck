@@ -6,14 +6,16 @@ wasabi.samples() => wasabi.pos;
 
 BPM tempo;
 
+2 => wasabi.gain;
+
 while(true){
     0 => int beat;
     while (beat < wasabi_ptrn.cap()){
         if (wasabi_ptrn[beat]){
-            0.5 => wasabi.gain;
             0 => wasabi.pos;
         }
         tempo.quarterNote => now;
         beat++;
     }
+    tempo.quarterNote * 8 => now;
 }
