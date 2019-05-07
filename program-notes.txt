@@ -1,0 +1,13 @@
+Title: Beats by Hammy
+By: Fayth Kim and Matt DelSordo
+Intro: often times, DJs just don't know what the crowd wants. That is why we put the important task of creating
+the music to a pet hamster named Wasabi. The program functions by generating sounds as Wasabi runs in his ball.
+Using a webcam that is mounted above a square fencing (in order to keep Wasabi in an enclosed area), python
+scripts using OpenCV were used to detect whether Wasabi runs in or out of defined 4x4 grid squares. All the squares
+are initialized as 'off', but if Wasabi runs into a square, pixel color changes trigger it as 'on' (and vice versa), 
+where midi signals then are sent to chuck where the midi messages are processed. In the 4x4 grid, each 1x1 square is assigned a different
+sound pattern or song (w/ respective .ck files). The generated sound files were a curated selection of hamster/rodent
+noises, well-known hamster-based tunes, and drum patterns. For a better listening experience in the generated song,
+the BPM of the 'Hamster Dance' song (136) was used as a standard in which other BPMs were to. In addition, a queue was made
+for each midi/chuck process so that sound files were either turned off or on on the first down beat. DJ Wasabi the hamster 
+may choose to create a different mix each time which results in unforgettable performances every time!
